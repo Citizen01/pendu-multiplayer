@@ -1,34 +1,50 @@
-#include "SDL.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_net.h>
+#include <fmod.h>
 
-int main( int argc, char* args[] )
+void pause();
+
+int main(int argc, char *argv[])
 {
-	//The images
-    SDL_Surface* hello = NULL;
-    SDL_Surface* screen = NULL;
+    SDL_Surface *ecran = NULL, *imageDeFond = NULL;
+    SDL_Rect positionFond;
 
-    //Start SDL
-    SDL_Init( SDL_INIT_EVERYTHING );
-    
-	//Set up screen
-    screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE );
+    positionFond.x = 0;
+    positionFond.y = 0;
 
-    //Load image
-    hello = SDL_LoadBMP( "hello.bmp" );
+    SDL_Init(SDL_INIT_VIDEO);
 
-	//Apply image to screen
-    SDL_BlitSurface( hello, NULL, screen, NULL );
+    ecran = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE);
+    SDL_WM_SetCaption("Chargement d'images en SDL", NULL);
 
-    //Update Screen
-    SDL_Flip( screen );
+    /* Chargement d'une image Bitmap dans une surface */
+    imageDeFond = IMG_Load("lac_en_montagne.bmp");
+    /* On blitte par-dessus l'écran */
+    SDL_BlitSurface(imageDeFond, NULL, ecran, &positionFond);
 
-    //Pause
-    SDL_Delay( 200000 );
+    SDL_Flip(ecran);
+    pause();
 
-	//Free the loaded image
-    SDL_FreeSurface( hello );
-
-    //Quit SDL
+    SDL_FreeSurface(imageDeFond); /* On libère la surface */
     SDL_Quit();
-    
-    return 0;    
+
+    return EXIT_SUCCESS;
+}
+
+void pause()
+{
+    int continuer = 1;
+    SDL_Event event;
+ 
+    while (continuer)
+    {
+        SDL_WaitEvent(&event);
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                continuer = 0;
+        }
+    }
 }
