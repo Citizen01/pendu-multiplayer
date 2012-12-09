@@ -1,6 +1,8 @@
 
 #include "CApp.h"
- 
+
+CApp* APP = NULL;
+
 CApp::CApp() {
 	Surf_Display = NULL;
 	Surf_Background = NULL;
@@ -31,9 +33,19 @@ int CApp::OnExecute() {
  
     return 0;
 }
- 
+
+SDL_Surface* getBackground()
+{
+	return APP->Surf_Background;
+}
+
+TTF_Font* getFont()
+{
+	return APP->font;
+}
+
 int main(int argc, char* argv[]) {
     CApp theApp;
- 
+	APP = &theApp;
     return theApp.OnExecute();
 }
